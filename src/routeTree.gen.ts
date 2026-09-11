@@ -10,11 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CommandeRouteImport } from './routes/commande'
+import { Route as CompteRouteImport } from './routes/compte'
 import { Route as LivraisonRouteImport } from './routes/livraison'
+import { Route as MesCommandesRouteImport } from './routes/mes-commandes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommandeRoute = CommandeRouteImport.update({
+  id: '/commande',
+  path: '/commande',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompteRoute = CompteRouteImport.update({
+  id: '/compte',
+  path: '/compte',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivraisonRoute = LivraisonRouteImport.update({
@@ -22,31 +35,49 @@ const LivraisonRoute = LivraisonRouteImport.update({
   path: '/livraison',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MesCommandesRoute = MesCommandesRouteImport.update({
+  id: '/mes-commandes',
+  path: '/mes-commandes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/commande': typeof CommandeRoute
+  '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
+  '/mes-commandes': typeof MesCommandesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/commande': typeof CommandeRoute
+  '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
+  '/mes-commandes': typeof MesCommandesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/commande': typeof CommandeRoute
+  '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
+  '/mes-commandes': typeof MesCommandesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/livraison'
+  fullPaths: '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/livraison'
-  id: '__root__' | '/' | '/livraison'
+  to: '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
+  id:
+    '__root__' | '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommandeRoute: typeof CommandeRoute
+  CompteRoute: typeof CompteRoute
   LivraisonRoute: typeof LivraisonRoute
+  MesCommandesRoute: typeof MesCommandesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +89,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/commande': {
+      id: '/commande'
+      path: '/commande'
+      fullPath: '/commande'
+      preLoaderRoute: typeof CommandeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compte': {
+      id: '/compte'
+      path: '/compte'
+      fullPath: '/compte'
+      preLoaderRoute: typeof CompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/livraison': {
       id: '/livraison'
       path: '/livraison'
@@ -65,12 +110,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LivraisonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mes-commandes': {
+      id: '/mes-commandes'
+      path: '/mes-commandes'
+      fullPath: '/mes-commandes'
+      preLoaderRoute: typeof MesCommandesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommandeRoute: CommandeRoute,
+  CompteRoute: CompteRoute,
   LivraisonRoute: LivraisonRoute,
+  MesCommandesRoute: MesCommandesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

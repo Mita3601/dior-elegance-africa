@@ -4,7 +4,7 @@ import { useShop } from "@/lib/shop-context";
 import { BOUTIQUE, COUNTRIES, formatFCFA } from "@/lib/shop";
 
 export function SiteHeader() {
-  const { count, setCartOpen, country, setCountry, user } = useShop();
+  const { count, setCartOpen, country, setCountry, user, session, logoutLocal } = useShop();
   const navigate = useNavigate();
   const livraison = COUNTRIES.find((c) => c.code === country)?.livraison ?? 0;
 
@@ -34,7 +34,11 @@ export function SiteHeader() {
                 <button
                   type="button"
                   onClick={async () => {
-                    await supabase.auth.signOut();
+                    if (session?.access_token === "local-dev-token") {
+                      logoutLocal();
+                    } else {
+                      await supabase.auth.signOut();
+                    }
                     navigate({ to: "/" });
                   }}
                   className="hidden rounded-full bg-white/45 px-4 py-2 text-sm font-medium ring-1 ring-black/5 backdrop-blur-md transition-colors hover:text-ink-soft sm:flex"

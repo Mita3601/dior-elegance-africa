@@ -9,6 +9,11 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { SiteHeader } from "@/components/SiteHeader";
+import { CartDrawer } from "@/components/CartDrawer";
+import { ProductSheet } from "@/components/ProductSheet";
+import { SiteFooter } from "@/components/SiteFooter";
+import { ShopProvider } from "@/lib/shop-context";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -119,8 +124,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ShopProvider>
+        <SiteHeader />
+        <CartDrawer />
+        <ProductSheet />
+        <div className="min-h-screen">
+          <Outlet />
+        </div>
+        <SiteFooter />
+      </ShopProvider>
     </QueryClientProvider>
   );
 }
