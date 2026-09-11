@@ -109,7 +109,8 @@ export function CartDrawer() {
             disabled={detailed.length === 0}
             onClick={() => {
               setCartOpen(false);
-              navigate({ to: user ? "/commande" : "/compte", search: user ? undefined : { next: "/commande" } });
+              if (user) navigate({ to: "/commande" });
+              else navigate({ to: "/compte", search: { next: "/commande" } });
             }}
             className="mt-5 w-full rounded-full bg-ink py-3 text-sm font-medium text-ivory ring-1 ring-ink/10 disabled:opacity-40"
           >
