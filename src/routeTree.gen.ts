@@ -14,6 +14,7 @@ import { Route as CommandeRouteImport } from './routes/commande'
 import { Route as CompteRouteImport } from './routes/compte'
 import { Route as LivraisonRouteImport } from './routes/livraison'
 import { Route as MesCommandesRouteImport } from './routes/mes-commandes'
+import { Route as ApiPublicMoneyfusionWebhookRouteImport } from './routes/api/public/moneyfusion/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,12 @@ const MesCommandesRoute = MesCommandesRouteImport.update({
   path: '/mes-commandes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMoneyfusionWebhookRoute =
+  ApiPublicMoneyfusionWebhookRouteImport.update({
+    id: '/api/public/moneyfusion/webhook',
+    path: '/api/public/moneyfusion/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +54,7 @@ export interface FileRoutesByFullPath {
   '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
   '/mes-commandes': typeof MesCommandesRoute
+  '/api/public/moneyfusion/webhook': typeof ApiPublicMoneyfusionWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +62,7 @@ export interface FileRoutesByTo {
   '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
   '/mes-commandes': typeof MesCommandesRoute
+  '/api/public/moneyfusion/webhook': typeof ApiPublicMoneyfusionWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,14 +71,33 @@ export interface FileRoutesById {
   '/compte': typeof CompteRoute
   '/livraison': typeof LivraisonRoute
   '/mes-commandes': typeof MesCommandesRoute
+  '/api/public/moneyfusion/webhook': typeof ApiPublicMoneyfusionWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
+  fullPaths:
+    | '/'
+    | '/commande'
+    | '/compte'
+    | '/livraison'
+    | '/mes-commandes'
+    | '/api/public/moneyfusion/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
+  to:
+    | '/'
+    | '/commande'
+    | '/compte'
+    | '/livraison'
+    | '/mes-commandes'
+    | '/api/public/moneyfusion/webhook'
   id:
-    '__root__' | '/' | '/commande' | '/compte' | '/livraison' | '/mes-commandes'
+    | '__root__'
+    | '/'
+    | '/commande'
+    | '/compte'
+    | '/livraison'
+    | '/mes-commandes'
+    | '/api/public/moneyfusion/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,6 +106,7 @@ export interface RootRouteChildren {
   CompteRoute: typeof CompteRoute
   LivraisonRoute: typeof LivraisonRoute
   MesCommandesRoute: typeof MesCommandesRoute
+  ApiPublicMoneyfusionWebhookRoute: typeof ApiPublicMoneyfusionWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MesCommandesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/moneyfusion/webhook': {
+      id: '/api/public/moneyfusion/webhook'
+      path: '/api/public/moneyfusion/webhook'
+      fullPath: '/api/public/moneyfusion/webhook'
+      preLoaderRoute: typeof ApiPublicMoneyfusionWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -126,6 +162,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompteRoute: CompteRoute,
   LivraisonRoute: LivraisonRoute,
   MesCommandesRoute: MesCommandesRoute,
+  ApiPublicMoneyfusionWebhookRoute: ApiPublicMoneyfusionWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
