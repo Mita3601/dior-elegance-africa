@@ -32,51 +32,16 @@ type ShopState = {
   user: User | null;
   session: Session | null;
   authReady: boolean;
-  loginLocal: (email: string, name?: string) => void;
-  logoutLocal: () => void;
+  displayName: string;
+  signOut: () => Promise<void>;
 };
 
 const ShopContext = createContext<ShopState | null>(null);
 
 const STORAGE_KEYS = {
-  cart: "aurelia.cart",
-  country: "aurelia.country",
-  account: "aurelia.account",
+  cart: "dior-parfumerie.cart",
+  country: "dior-parfumerie.country",
 };
-
-function createLocalUser(email: string, name?: string): User {
-  const displayName = name?.trim() || "Client local";
-  return {
-    id: crypto.randomUUID(),
-    email,
-    role: "authenticated",
-    aud: "authenticated",
-    app_metadata: { provider: "local" },
-    user_metadata: { full_name: displayName },
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    last_sign_in_at: new Date().toISOString(),
-    phone: null,
-    confirmation_sent_at: null,
-    confirmed_at: new Date().toISOString(),
-    email_confirmed_at: new Date().toISOString(),
-    factors: [],
-    identities: [],
-    is_anonymous: false,
-    banned_until: null,
-  } as User;
-}
-
-function createLocalSession(user: User): Session {
-  return {
-    access_token: "local-dev-token",
-    token_type: "bearer",
-    expires_in: 3600,
-    expires_at: Math.floor((Date.now() + 3600 * 1000) / 1000),
-    refresh_token: "local-dev-refresh",
-    user,
-  } as Session;
-}
 
 export function ShopProvider({ children }: { children: ReactNode }) {
   const [country, setCountryState] = useState<CountryCode>("BF");
@@ -93,43 +58,28 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       if (rawCart) setLines(JSON.parse(rawCart) as CartLine[]);
       const rawCountry = localStorage.getItem(STORAGE_KEYS.country) as CountryCode | null;
       if (rawCountry) setCountryState(rawCountry);
-
-      const rawAccount = localStorage.getItem(STORAGE_KEYS.account);
-      if (rawAccount) {
-        const parsed = JSON.parse(rawAccount) as { email?: string; name?: string };
-        if (parsed.email) {
-          const localUser = createLocalUser(parsed.email, parsed.name);
-          setUser(localUser);
-          setSession(createLocalSession(localUser));
-        }
-      }
     } catch {
       /* stockage indisponible */
-    } finally {
-      setAuthReady(true);
     }
   }, []);
 
   useEffect(() => {
-    const hasSupabaseConfig =
-      typeof import.meta !== "undefined" &&
-      !!(import.meta.env?.VITE_SUPABASE_URL || import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY);
-
-    if (!hasSupabaseConfig) {
-      return;
-    }
-
-    const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+    const { data } = supabase.auth.onAuthStateChange((_event: string, next: Session | null) => {
       setSession(next);
       setUser(next?.user ?? null);
       setAuthReady(true);
     });
 
-    supabase.auth.getSession().then(({ data: got }) => {
-      setSession(got.session);
-      setUser(got.session?.user ?? null);
-      setAuthReady(true);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data: got }: { data: { session: Session | null } }) => {
+        setSession(got.session);
+        setUser(got.session?.user ?? null);
+      })
+      .catch(() => {
+        /* session indisponible */
+      })
+      .finally(() => setAuthReady(true));
 
     return () => data.subscription.unsubscribe();
   }, []);
@@ -152,39 +102,10 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const loginLocal = useCallback((email: string, name?: string) => {
-    const normalizedEmail = email.trim();
-    if (!normalizedEmail) return;
-
-    const localUser = createLocalUser(normalizedEmail, name);
-    const localSession = createLocalSession(localUser);
-    setUser(localUser);
-    setSession(localSession);
-    setAuthReady(true);
-
-    try {
-      localStorage.setItem(
-        STORAGE_KEYS.account,
-        JSON.stringify({
-          email: normalizedEmail,
-          name: name?.trim() || localUser.user_metadata.full_name,
-        }),
-      );
-    } catch {
-      /* stockage indisponible */
-    }
-  }, []);
-
-  const logoutLocal = useCallback(() => {
+  const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
     setUser(null);
     setSession(null);
-    setAuthReady(true);
-
-    try {
-      localStorage.removeItem(STORAGE_KEYS.account);
-    } catch {
-      /* stockage indisponible */
-    }
   }, []);
 
   const add = useCallback(
@@ -222,6 +143,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
     const subtotal = detailed.reduce((sum, l) => sum + l.product.prix * l.quantity, 0);
     const shipping = detailed.length > 0 ? shippingFor(country) : 0;
+    const metadataName = user?.user_metadata?.["full_name"];
 
     return {
       country,
@@ -242,8 +164,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       user,
       session,
       authReady,
-      loginLocal,
-      logoutLocal,
+      displayName: (typeof metadataName === "string" && metadataName) || user?.email || "Client",
+      signOut,
     };
   }, [
     country,
@@ -257,8 +179,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     user,
     session,
     authReady,
-    loginLocal,
-    logoutLocal,
+    signOut,
   ]);
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

@@ -9,10 +9,15 @@ import hero from "@/assets/hero-bottle.jpg";
 export const HERO_IMAGE = hero;
 
 export const BOUTIQUE = {
-  nom: "Maison Aurelia",
+  nom: "Dior_Parfumerie",
+  raisonSociale: "Dior_Parfumerie",
   ville: "Ouahigouya, Burkina Faso",
+  adresse: "Secteur 5, Ouahigouya, Province du Yatenga, Burkina Faso",
   telephone: "+226 04 09 07 12",
+  telephoneLien: "+22604090712",
+  email: "racmidl101@gmail.com",
   whatsapp: "22604090712",
+  devise: "FCFA (XOF)",
 };
 
 export type CountryCode = "BF" | "BJ" | "CI" | "CM";
@@ -96,7 +101,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug: "signature-aurelia",
-    nom: "Signature Aurelia",
+    nom: "Signature Or",
     notes: "Ambre · Vanille · Cèdre",
     prix: 25000,
     contenance: "100 ml",
@@ -112,5 +117,5 @@ export function productBySlug(slug: string) {
 }
 
 export function formatFCFA(n: number) {
-  return `${n.toLocaleString("fr-FR").replace(/\u202f|\u00a0/g, " ")} F`;
+  return `${n.toLocaleString("fr-FR").replace(/\u202f|\u00a0/g, " ")} FCFA`;
 }

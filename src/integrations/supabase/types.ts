@@ -54,39 +54,60 @@ export type Database = {
           address: string
           country: string
           created_at: string
+          email: string | null
           full_name: string
           id: string
+          payment_message: string | null
+          payment_provider: string
+          payment_reference: string | null
+          payment_status: string
+          payment_token: string | null
           phone: string
           shipping: number
           status: string
           subtotal: number
           total: number
+          updated_at: string
           user_id: string
         }
         Insert: {
           address: string
           country: string
           created_at?: string
+          email?: string | null
           full_name: string
           id?: string
+          payment_message?: string | null
+          payment_provider?: string
+          payment_reference?: string | null
+          payment_status?: string
+          payment_token?: string | null
           phone: string
           shipping: number
           status?: string
           subtotal: number
           total: number
+          updated_at?: string
           user_id: string
         }
         Update: {
           address?: string
           country?: string
           created_at?: string
+          email?: string | null
           full_name?: string
           id?: string
+          payment_message?: string | null
+          payment_provider?: string
+          payment_reference?: string | null
+          payment_status?: string
+          payment_token?: string | null
           phone?: string
           shipping?: number
           status?: string
           subtotal?: number
           total?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
