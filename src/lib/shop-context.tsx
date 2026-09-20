@@ -64,7 +64,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+    const { data } = supabase.auth.onAuthStateChange((_event: string, next: Session | null) => {
       setSession(next);
       setUser(next?.user ?? null);
       setAuthReady(true);
@@ -72,7 +72,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
     supabase.auth
       .getSession()
-      .then(({ data: got }) => {
+      .then(({ data: got }: { data: { session: Session | null } }) => {
         setSession(got.session);
         setUser(got.session?.user ?? null);
       })
