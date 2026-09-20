@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 import { COUNTRIES, PRODUCTS, shippingFor, type CountryCode } from "@/lib/shop";
 
 const createOrderSchema = z.object({
@@ -22,9 +24,7 @@ const createOrderSchema = z.object({
 });
 
 export const createOrder = createServerFn({ method: "POST" })
-  .middleware([
-    (await import("@/integrations/supabase/auth-middleware")).requireSupabaseAuth,
-  ])
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => createOrderSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -128,9 +128,7 @@ export const createOrder = createServerFn({ method: "POST" })
   });
 
 export const getOrderStatus = createServerFn({ method: "POST" })
-  .middleware([
-    (await import("@/integrations/supabase/auth-middleware")).requireSupabaseAuth,
-  ])
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ orderId: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
@@ -187,9 +185,7 @@ export const getOrderStatus = createServerFn({ method: "POST" })
   });
 
 export const listMyOrders = createServerFn({ method: "POST" })
-  .middleware([
-    (await import("@/integrations/supabase/auth-middleware")).requireSupabaseAuth,
-  ])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("orders")
