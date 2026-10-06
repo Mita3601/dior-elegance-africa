@@ -3,6 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useShop } from "@/lib/shop-context";
 
 export const Route = createFileRoute("/mes-commandes")({
+  head: () => ({ meta: [
+    { title: "Mes commandes — Dior_Parfumerie" },
+    { name: "description", content: "Retrouvez vos commandes de parfums Dior_Parfumerie." },
+    { property: "og:title", content: "Mes commandes — Dior_Parfumerie" },
+    { property: "og:description", content: "Votre historique de commandes Dior_Parfumerie." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: MesCommandesPage,
 });
 

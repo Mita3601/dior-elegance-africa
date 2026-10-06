@@ -4,6 +4,14 @@ import { FormEvent, useEffect, useState } from "react";
 import { useShop } from "@/lib/shop-context";
 
 export const Route = createFileRoute("/compte")({
+  head: () => ({ meta: [
+    { title: "Mon compte — Dior_Parfumerie" },
+    { name: "description", content: "Votre compte client Dior_Parfumerie à Bouaflé, Côte d'Ivoire." },
+    { property: "og:title", content: "Mon compte — Dior_Parfumerie" },
+    { property: "og:description", content: "Accédez à votre compte client Dior_Parfumerie." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: ComptePage,
 });
 
