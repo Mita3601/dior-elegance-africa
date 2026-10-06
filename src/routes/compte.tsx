@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useEffect, useState } from "react";
 
 import { useShop } from "@/lib/shop-context";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/compte")({
   head: () => ({ meta: [
@@ -17,10 +18,12 @@ export const Route = createFileRoute("/compte")({
 
 function ComptePage() {
   const navigate = useNavigate();
-  const { user, loginLocal, authReady } = useShop();
+  const { user, authReady } = useShop();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [password, setPassword] = useState("");
+  const [notice, setNotice] = useState("");
 
   const next =
     typeof window !== "undefined"
@@ -33,18 +36,24 @@ function ComptePage() {
     }
   }, [authReady, navigate, next, user]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail || !trimmedEmail.includes("@")) {
-      setError("Saisis une adresse e-mail valide pour créer ton compte local.");
+      setError("Saisis une adresse e-mail valide pour créer ton compte.");
       return;
     }
 
     setError("");
-    loginLocal(trimmedEmail, name);
-    navigate({ to: next as any });
+    const { data, error: signupError } = await supabase.auth.signUp({
+      email: trimmedEmail,
+      password,
+      options: { data: { full_name: name } },
+    });
+    if (signupError) { setError(signupError.message); return; }
+    if (data.session) navigate({ to: next as any });
+    else setNotice("Consultez votre e-mail pour confirmer votre compte.");
   };
 
   return (
@@ -53,7 +62,7 @@ function ComptePage() {
         <p className="text-xs font-medium uppercase tracking-[0.28em] text-gold">Compte</p>
         <h1 className="mt-4 font-serif text-4xl font-medium">Créer un compte pour commander</h1>
         <p className="mt-3 text-sm text-ink-soft">
-          Ce mode local permet de tester le parcours boutique sans configuration Supabase.
+          Votre compte client Dior_Parfumerie.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -86,6 +95,11 @@ function ComptePage() {
             />
           </div>
 
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-ink">Mot de passe</label>
+            <input id="password" type="password" autoComplete="new-password" minLength={8} required value={password} onChange={(event) => setPassword(event.target.value)} className="w-full rounded-xl border border-black/10 bg-white/80 px-4 py-3 text-sm outline-none ring-0 transition focus:border-gold" />
+          </div>
+          {notice ? <p className="text-sm text-ink-soft">{notice}</p> : null}
           {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
           <button

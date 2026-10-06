@@ -35,7 +35,7 @@ function MesCommandesPage() {
         <p className="text-xs font-medium uppercase tracking-[0.28em] text-gold">Mes commandes</p>
         <h1 className="mt-4 font-serif text-4xl font-medium">Historique local</h1>
         <p className="mt-3 text-sm text-ink-soft">
-          Bienvenue {user.user_metadata?.full_name || user.email}. Les commandes sont enregistrées
+          Bienvenue {user.user_metadata?.['full_name'] || user.email}. Les commandes sont enregistrées
           localement dans ce navigateur.
         </p>
       </div>

@@ -22,7 +22,7 @@ function CommandePage() {
   const [submitted, setSubmitted] = useState(false);
 
   const customerName = useMemo(
-    () => user?.user_metadata?.full_name || user?.email || "Client",
+    () => user?.user_metadata?.['full_name'] || user?.email || "Client",
     [user],
   );
 
