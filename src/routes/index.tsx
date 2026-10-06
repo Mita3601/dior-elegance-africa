@@ -5,17 +5,17 @@ import { BOUTIQUE, HERO_IMAGE, PRODUCTS, formatFCFA } from "@/lib/shop";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maison Aurelia — Parfums de luxe à Ouahigouya, Burkina Faso" },
+      { title: "Dior_Parfumerie — Parfums à Bouaflé, Côte d'Ivoire" },
       {
         name: "description",
         content:
-          "Parfums d'exception livrés au Burkina Faso, Bénin, Côte d'Ivoire et Cameroun. Flacons de 4 000 F à 25 000 F, commande en ligne depuis Ouahigouya.",
+          "Parfums d'exception à Bouaflé, Côte d'Ivoire. Flacons de 4 000 F à 25 000 F, livraison gratuite en Côte d'Ivoire et au Burkina Faso.",
       },
-      { property: "og:title", content: "Maison Aurelia — Parfums livrés en Afrique de l'Ouest" },
+      { property: "og:title", content: "Dior_Parfumerie — Parfums à Bouaflé, Côte d'Ivoire" },
       {
         property: "og:description",
         content:
-          "Six compositions, de 4 000 F à 25 000 F. Livraison offerte au Burkina Faso, 5 000 F ailleurs.",
+          "Six compositions, de 4 000 F à 25 000 F. Livraison offerte en Côte d'Ivoire et au Burkina Faso, 5 000 F pour le Bénin et le Cameroun.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -26,7 +26,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { add, setCartOpen, setOpenSlug } = useShop();
-  const hero = PRODUCTS[3]!;
+  const hero = PRODUCTS[3];
+  if (!hero) return null;
 
   return (
     <main className="relative z-10">
@@ -34,7 +35,7 @@ function Index() {
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="rise-in lg:col-span-5">
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
-              {BOUTIQUE.nom} · Ouahigouya
+              {BOUTIQUE.nom} · {BOUTIQUE.ville}
             </p>
             <h1 className="mt-6 max-w-[18ch] text-balance font-serif text-[3.25rem] font-medium leading-none sm:text-7xl">
               Voile d'Ambre

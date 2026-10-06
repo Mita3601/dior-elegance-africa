@@ -20,7 +20,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-2 text-sm text-ink-soft">
               <li>{BOUTIQUE.ville}</li>
               <li>
-                <a href={`tel:+22604090712`} className="transition-colors hover:text-ink">
+                <a href={`tel:${BOUTIQUE.telephoneLien}`} className="transition-colors hover:text-ink">
                   {BOUTIQUE.telephone}
                 </a>
               </li>
@@ -32,7 +32,7 @@ export function SiteFooter() {
               Livraison
             </p>
             <p className="mt-4 max-w-[36ch] text-pretty text-sm text-ink-soft">
-              Offerte au Burkina Faso. 5 000 F de frais de livraison pour le Bénin, la Côte d'Ivoire
+              Offerte en Côte d'Ivoire et au Burkina Faso. 5 000 F de frais de livraison pour le Bénin
               et le Cameroun.
             </p>
           </div>

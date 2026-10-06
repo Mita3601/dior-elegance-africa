@@ -11,12 +11,12 @@ export const HERO_IMAGE = hero;
 export const BOUTIQUE = {
   nom: "Dior_Parfumerie",
   raisonSociale: "Dior_Parfumerie",
-  ville: "Ouahigouya, Burkina Faso",
-  adresse: "Secteur 5, Ouahigouya, Province du Yatenga, Burkina Faso",
-  telephone: "+226 04 09 07 12",
-  telephoneLien: "+22604090712",
+  ville: "Bouaflé, Côte d'Ivoire",
+  adresse: "Bouaflé, Côte d'Ivoire",
+  telephone: "01 43 28 80 59",
+  telephoneLien: "+2250143288059",
   email: "racmidl101@gmail.com",
-  whatsapp: "22604090712",
+  whatsapp: "2250143288059",
   devise: "FCFA (XOF)",
 };
 
@@ -25,7 +25,7 @@ export type CountryCode = "BF" | "BJ" | "CI" | "CM";
 export const COUNTRIES: { code: CountryCode; nom: string; livraison: number }[] = [
   { code: "BF", nom: "Burkina Faso", livraison: 0 },
   { code: "BJ", nom: "Bénin", livraison: 5000 },
-  { code: "CI", nom: "Côte d'Ivoire", livraison: 5000 },
+  { code: "CI", nom: "Côte d'Ivoire", livraison: 0 },
   { code: "CM", nom: "Cameroun", livraison: 5000 },
 ];
 
@@ -108,7 +108,7 @@ export const PRODUCTS: Product[] = [
     image: p6,
     edition: "Édition limitée",
     description:
-      "Le coffret signature : ambre, vanille fumée et cèdre, assemblés à la main en très petite série à Ouahigouya.",
+      "Le coffret signature : ambre, vanille fumée et cèdre, assemblés à la main en très petite série à Bouaflé.",
   },
 ];
 

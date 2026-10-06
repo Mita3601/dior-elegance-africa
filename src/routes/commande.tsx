@@ -5,6 +5,14 @@ import { useShop } from "@/lib/shop-context";
 import { BOUTIQUE, COUNTRIES, countryName, formatFCFA } from "@/lib/shop";
 
 export const Route = createFileRoute("/commande")({
+  head: () => ({ meta: [
+    { title: "Finaliser ma commande — Dior_Parfumerie" },
+    { name: "description", content: "Votre commande de parfums, avec livraison gratuite en Côte d'Ivoire." },
+    { property: "og:title", content: "Finaliser ma commande — Dior_Parfumerie" },
+    { property: "og:description", content: "Consultez votre commande et les frais de livraison Dior_Parfumerie." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: CommandePage,
 });
 
@@ -14,7 +22,7 @@ function CommandePage() {
   const [submitted, setSubmitted] = useState(false);
 
   const customerName = useMemo(
-    () => user?.user_metadata?.full_name || user?.email || "Client",
+    () => user?.user_metadata?.['full_name'] || user?.email || "Client",
     [user],
   );
 

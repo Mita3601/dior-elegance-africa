@@ -3,6 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useShop } from "@/lib/shop-context";
 
 export const Route = createFileRoute("/mes-commandes")({
+  head: () => ({ meta: [
+    { title: "Mes commandes — Dior_Parfumerie" },
+    { name: "description", content: "Retrouvez vos commandes de parfums Dior_Parfumerie." },
+    { property: "og:title", content: "Mes commandes — Dior_Parfumerie" },
+    { property: "og:description", content: "Votre historique de commandes Dior_Parfumerie." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: MesCommandesPage,
 });
 
@@ -27,7 +35,7 @@ function MesCommandesPage() {
         <p className="text-xs font-medium uppercase tracking-[0.28em] text-gold">Mes commandes</p>
         <h1 className="mt-4 font-serif text-4xl font-medium">Historique local</h1>
         <p className="mt-3 text-sm text-ink-soft">
-          Bienvenue {user.user_metadata?.full_name || user.email}. Les commandes sont enregistrées
+          Bienvenue {user.user_metadata?.['full_name'] || user.email}. Les commandes sont enregistrées
           localement dans ce navigateur.
         </p>
       </div>

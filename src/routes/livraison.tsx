@@ -4,13 +4,13 @@ import { BOUTIQUE, COUNTRIES, formatFCFA } from "@/lib/shop";
 export const Route = createFileRoute("/livraison")({
   head: () => ({
     meta: [
-      { title: "Livraison et contact — Maison Aurelia" },
+      { title: "Livraison et contact — Dior_Parfumerie à Bouaflé" },
       {
         name: "description",
         content:
-          "Expédition depuis Ouahigouya vers le Burkina Faso, le Bénin, la Côte d'Ivoire et le Cameroun. Livraison offerte au Burkina, 5 000 F ailleurs.",
+          "Expédition depuis Bouaflé, Côte d'Ivoire. Livraison offerte en Côte d'Ivoire et au Burkina Faso, 5 000 FCFA pour le Bénin et le Cameroun.",
       },
-      { property: "og:title", content: "Livraison et contact — Maison Aurelia" },
+      { property: "og:title", content: "Livraison et contact — Dior_Parfumerie à Bouaflé" },
       {
         property: "og:description",
         content: "Nos délais, nos pays desservis et nos frais de livraison en francs CFA.",
@@ -27,7 +27,7 @@ function Livraison() {
     <main className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-12 lg:px-10">
       <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">Livraison</p>
       <h1 className="mt-4 max-w-[20ch] text-balance font-serif text-5xl font-medium leading-tight">
-        De Ouahigouya à votre porte
+        De Bouaflé à votre porte
       </h1>
       <p className="mt-5 max-w-[52ch] text-pretty text-ink-soft">
         Chaque commande part de notre boutique de {BOUTIQUE.ville}. Les flacons voyagent emballés à
@@ -58,7 +58,7 @@ function Livraison() {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <a
-            href="tel:+22604090712"
+            href={`tel:${BOUTIQUE.telephoneLien}`}
             className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-ivory"
           >
             {BOUTIQUE.telephone}
