@@ -19,6 +19,7 @@ export const Route = createFileRoute("/compte")({
 function ComptePage() {
   const navigate = useNavigate();
   const { user, authReady } = useShop();
+  const [mode, setMode] = useState<"signup" | "login">("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -46,6 +47,21 @@ function ComptePage() {
     }
 
     setError("");
+    setNotice("");
+
+    if (mode === "login") {
+      const { error: loginError } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
+      if (loginError) {
+        setError("E-mail ou mot de passe incorrect.");
+        return;
+      }
+      navigate({ to: next as any });
+      return;
+    }
+
     const { data, error: signupError } = await supabase.auth.signUp({
       email: trimmedEmail,
       password,
@@ -60,25 +76,29 @@ function ComptePage() {
     <main className="mx-auto max-w-3xl px-6 py-12 lg:px-10">
       <div className="rounded-[28px] bg-white/60 p-6 ring-1 ring-black/5 backdrop-blur-md sm:p-8">
         <p className="text-xs font-medium uppercase tracking-[0.28em] text-gold">Compte</p>
-        <h1 className="mt-4 font-serif text-4xl font-medium">Créer un compte pour commander</h1>
+        <h1 className="mt-4 font-serif text-4xl font-medium">
+          {mode === "signup" ? "Créer un compte pour commander" : "Se connecter"}
+        </h1>
         <p className="mt-3 text-sm text-ink-soft">
           Votre compte client Dior_Parfumerie.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-          <div>
-            <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">
-              Nom complet
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Marie Dupont"
-              className="w-full rounded-xl border border-black/10 bg-white/80 px-4 py-3 text-sm outline-none ring-0 transition focus:border-gold"
-            />
-          </div>
+          {mode === "signup" ? (
+            <div>
+              <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">
+                Nom complet
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Marie Dupont"
+                className="w-full rounded-xl border border-black/10 bg-white/80 px-4 py-3 text-sm outline-none ring-0 transition focus:border-gold"
+              />
+            </div>
+          ) : null}
 
           <div>
             <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">
@@ -106,7 +126,14 @@ function ComptePage() {
             type="submit"
             className="w-full rounded-full bg-ink px-5 py-3 text-sm font-medium text-ivory"
           >
-            Créer mon compte
+            {mode === "signup" ? "Créer mon compte" : "Se connecter"}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMode(mode === "signup" ? "login" : "signup"); setError(""); setNotice(""); }}
+            className="w-full text-center text-sm text-ink-soft underline underline-offset-4"
+          >
+            {mode === "signup" ? "Déjà un compte ? Se connecter" : "Pas encore de compte ? Créer un compte"}
           </button>
         </form>
       </div>
