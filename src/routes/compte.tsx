@@ -47,6 +47,21 @@ function ComptePage() {
     }
 
     setError("");
+    setNotice("");
+
+    if (mode === "login") {
+      const { error: loginError } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
+      if (loginError) {
+        setError("E-mail ou mot de passe incorrect.");
+        return;
+      }
+      navigate({ to: next as any });
+      return;
+    }
+
     const { data, error: signupError } = await supabase.auth.signUp({
       email: trimmedEmail,
       password,
