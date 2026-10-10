@@ -19,6 +19,7 @@ export const Route = createFileRoute("/compte")({
 function ComptePage() {
   const navigate = useNavigate();
   const { user, authReady } = useShop();
+  const [mode, setMode] = useState<"signup" | "login">("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
