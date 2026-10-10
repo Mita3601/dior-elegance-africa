@@ -126,7 +126,14 @@ function ComptePage() {
             type="submit"
             className="w-full rounded-full bg-ink px-5 py-3 text-sm font-medium text-ivory"
           >
-            Créer mon compte
+            {mode === "signup" ? "Créer mon compte" : "Se connecter"}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMode(mode === "signup" ? "login" : "signup"); setError(""); setNotice(""); }}
+            className="w-full text-center text-sm text-ink-soft underline underline-offset-4"
+          >
+            {mode === "signup" ? "Déjà un compte ? Se connecter" : "Pas encore de compte ? Créer un compte"}
           </button>
         </form>
       </div>
