@@ -19,6 +19,14 @@ export type CreatePaymentResult = {
   token: string;
 };
 
+// Le sous-domaine « www.pay.moneyfusion.net » n'a pas de certificat TLS valide
+// (échec de la négociation sécurisée) : on utilise toujours « pay.moneyfusion.net ».
+const FUSION_HOST = "https://pay.moneyfusion.net";
+
+function normalizeFusionUrl(url: string): string {
+  return url.trim().replace(/^https?:\/\/(www\.)?pay\.moneyfusion\.net/i, FUSION_HOST);
+}
+
 function getApiUrl(): string {
   const apiUrl = process.env["MONEYFUSION_API_URL"];
   if (!apiUrl) {
@@ -26,7 +34,7 @@ function getApiUrl(): string {
       "Le service de paiement n'est pas encore configuré. Merci de réessayer plus tard.",
     );
   }
-  return apiUrl.replace(/\/+$/, "/");
+  return normalizeFusionUrl(apiUrl).replace(/\/*$/, "/");
 }
 
 export async function createFusionPayment(
@@ -55,17 +63,32 @@ export async function createFusionPayment(
     webhook_url: input.webhookUrl,
   };
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  let response: Response;
+  try {
+    response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (error) {
+    console.error("[moneyfusion] connexion impossible", error);
+    throw new Error("Le service de paiement est momentanément injoignable. Merci de réessayer.");
+  }
 
-  const payload = (await response.json().catch(() => null)) as
-    | { statut?: boolean; token?: string; url?: string; message?: string }
-    | null;
+  const rawText = await response.text().catch(() => "");
+  let payload: { statut?: boolean; token?: string; url?: string; message?: string } | null = null;
+  try {
+    payload = rawText ? JSON.parse(rawText) : null;
+  } catch {
+    payload = null;
+  }
 
   if (!response.ok || !payload?.statut || !payload.url || !payload.token) {
+    console.error(
+      "[moneyfusion] réponse inattendue",
+      response.status,
+      rawText.slice(0, 500),
+    );
     throw new Error(
       payload?.message ?? "Le paiement n'a pas pu être initialisé. Merci de réessayer.",
     );
@@ -77,7 +100,7 @@ export async function createFusionPayment(
 export async function fetchFusionStatus(
   token: string,
 ): Promise<{ status: FusionStatus; message: string; reference: string | null }> {
-  const response = await fetch(`https://www.pay.moneyfusion.net/paiementNotif/${token}`, {
+  const response = await fetch(`${FUSION_HOST}/paiementNotif/${encodeURIComponent(token)}`, {
     method: "GET",
     headers: { Accept: "application/json" },
   });
