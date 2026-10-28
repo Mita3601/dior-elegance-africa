@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingBag, UserRound } from "lucide-react";
 import { useShop } from "@/lib/shop-context";
 import { BOUTIQUE, COUNTRIES, formatFCFA } from "@/lib/shop";
 
@@ -8,51 +7,28 @@ export function SiteHeader() {
   const navigate = useNavigate();
   const livraison = COUNTRIES.find((c) => c.code === country)?.livraison ?? 0;
 
-  const navItems = [
-    { label: "Collection", to: "/", hash: "collection" },
-    { label: "Livraison", to: "/livraison" },
-    { label: "Contact", to: "/contact" },
-    { label: "CGV", to: "/cgv" },
-  ];
-
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[#d9c8ae]/70 bg-[linear-gradient(180deg,rgba(248,243,236,0.94),rgba(244,237,229,0.85))] shadow-[0_10px_40px_rgba(47,36,19,0.06)] backdrop-blur-2xl">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-24 items-center justify-between gap-4">
-            <Link to="/" className="group flex items-center gap-3" aria-label="Accueil">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#d8c7aa] bg-[linear-gradient(135deg,#fefaf5,#efe5d3)] text-[10px] font-semibold tracking-[0.32em] text-[#241d17] shadow-[0_8px_18px_rgba(82,64,38,0.12)] transition-all duration-300 group-hover:-translate-y-0.5">
-                {BOUTIQUE.nom.slice(0, 2).toUpperCase()}
-              </div>
-              <div className="leading-none">
-                <div className="font-serif text-[2rem] tracking-[0.08em] text-[#1d1713] lg:text-[2.35rem]">
-                  {BOUTIQUE.nom}
-                </div>
-              </div>
+      <header className="sticky top-0 z-40 bg-ivory/70 backdrop-blur-md">
+        <div className="mx-auto max-w-6xl px-6 lg:px-10">
+          <div className="flex h-16 items-center justify-between lg:h-20">
+            <Link to="/" className="font-serif text-2xl font-medium tracking-tight lg:text-3xl">
+              {BOUTIQUE.nom}
             </Link>
-
-            <nav className="hidden items-center gap-1.5 rounded-full border border-[#d9c8ae]/80 bg-white/45 p-1.5 shadow-[0_8px_28px_rgba(62,45,25,0.08)] md:flex">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  hash={item.hash}
-                  className="rounded-full px-4 py-2 text-[0.78rem] font-medium uppercase tracking-[0.12em] text-[#554a3d] transition-all duration-200 hover:bg-[#1d1713] hover:text-[#f9f4ee]"
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <nav className="hidden items-center gap-8 text-sm font-medium text-ink-soft md:flex">
+              <Link to="/" hash="collection" className="transition-colors hover:text-ink">
+                Collection
+              </Link>
+              <Link to="/livraison" className="transition-colors hover:text-ink">
+                Livraison
+              </Link>
               {user ? (
-                <Link
-                  to="/mes-commandes"
-                  className="rounded-full px-4 py-2 text-[0.78rem] font-medium uppercase tracking-[0.12em] text-[#554a3d] transition-all duration-200 hover:bg-[#1d1713] hover:text-[#f9f4ee]"
-                >
+                <Link to="/mes-commandes" className="transition-colors hover:text-ink">
                   Mes commandes
                 </Link>
               ) : null}
             </nav>
-
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-3 lg:gap-5">
               {user ? (
                 <button
                   type="button"
@@ -60,43 +36,42 @@ export function SiteHeader() {
                     await signOut();
                     navigate({ to: "/" });
                   }}
-                  className="hidden items-center gap-2 rounded-full border border-[#d9c8ae] bg-[#fdfaf6] px-4 py-2 text-[0.72rem] font-medium uppercase tracking-[0.12em] text-[#2b241f] transition-all duration-200 hover:border-[#c9b18d] hover:bg-white sm:flex"
+                  className="hidden rounded-full bg-white/45 px-4 py-2 text-sm font-medium ring-1 ring-black/5 backdrop-blur-md transition-colors hover:text-ink-soft sm:flex"
                 >
-                  <UserRound className="h-4 w-4 text-[#b58c45]" />
-                  Déconnexion
+                  Se déconnecter
                 </button>
               ) : (
                 <Link
                   to="/compte"
-                  className="hidden items-center gap-2 rounded-full border border-[#d9c8ae] bg-[#fdfaf6] px-4 py-2 text-[0.72rem] font-medium uppercase tracking-[0.12em] text-[#2b241f] transition-all duration-200 hover:border-[#c9b18d] hover:bg-white sm:flex"
+                  className="hidden items-center gap-2 rounded-full bg-white/45 px-4 py-2 text-sm font-medium ring-1 ring-black/5 backdrop-blur-md sm:flex"
                 >
-                  <UserRound className="h-4 w-4 text-[#b58c45]" />
-                  Compte
+                  <span className="text-gold">
+                    <svg className="size-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7ZM2 18c0-3.3 3.6-5.5 8-5.5s8 2.2 8 5.5v1H2v-1Z" />
+                    </svg>
+                  </span>
+                  Créer un compte
                 </Link>
               )}
-
               <button
                 type="button"
                 onClick={() => setCartOpen(true)}
-                className="flex items-center gap-2 rounded-full bg-[#1d1713] px-3.5 py-2.5 text-[0.72rem] font-medium uppercase tracking-[0.12em] text-[#f6efe6] shadow-[0_18px_34px_rgba(29,23,19,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#2b241f]"
+                className="flex items-center gap-2 rounded-full bg-ink py-2 pl-2 pr-3 text-sm font-medium text-ivory ring-1 ring-ink/10"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#d7b06d] text-[10px] font-semibold text-[#1d1713]">
+                <span className="flex size-5 items-center justify-center rounded-full bg-gold text-[11px] font-semibold text-ink">
                   {count}
                 </span>
-                <span className="hidden sm:inline">Panier</span>
-                <ShoppingBag className="h-4 w-4" />
+                Panier
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="sticky top-[96px] z-40 border-b border-[#ddcdb5]/70 bg-[rgba(255,255,255,0.7)] backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 py-3 text-sm">
-            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#73675f]">
-              Livraison
-            </span>
+      <div className="sticky top-16 z-30 bg-white/40 ring-1 ring-black/5 backdrop-blur-md lg:top-20">
+        <div className="mx-auto max-w-6xl px-6 lg:px-10">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-3 text-sm">
+            <span className="font-medium text-ink-soft">Livraison</span>
             <div className="flex flex-wrap items-center gap-2">
               {COUNTRIES.map((c) => (
                 <button
@@ -105,17 +80,17 @@ export function SiteHeader() {
                   onClick={() => setCountry(c.code)}
                   className={
                     country === c.code
-                      ? "rounded-full bg-[#1d1713] px-3.5 py-1.5 text-[0.72rem] font-medium uppercase tracking-[0.12em] text-[#f9f4ee] shadow-sm"
-                      : "rounded-full border border-[#dcc9ae] bg-[#fdfaf7] px-3.5 py-1.5 text-[0.72rem] font-medium uppercase tracking-[0.12em] text-[#584e47] transition-colors hover:border-[#c7ae82] hover:text-[#1d1713]"
+                      ? "rounded-full bg-ink px-3.5 py-1.5 text-sm font-medium text-ivory"
+                      : "rounded-full bg-white/50 px-3.5 py-1.5 text-sm font-medium text-ink-soft ring-1 ring-black/5 transition-colors hover:text-ink"
                   }
                 >
                   {c.nom}
                 </button>
               ))}
             </div>
-            <span className="ml-auto hidden text-[#5f554f] sm:block">
+            <span className="ml-auto hidden text-ink-soft sm:block">
               {COUNTRIES.find((c) => c.code === country)?.nom} —{" "}
-              <span className="font-semibold text-[#1d1713]">
+              <span className="font-medium text-ink">
                 {livraison === 0 ? "livraison offerte" : `${formatFCFA(livraison)} de livraison`}
               </span>
             </span>

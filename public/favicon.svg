@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Dior Parfumerie">
+  <rect width="64" height="64" rx="14" fill="#111111"/>
+  <path d="M20 18h8.5c6.7 0 12 5.3 12 12s-5.3 12-12 12H20V18zm8.5 17c3.6 0 6.5-2.9 6.5-6.5S32.1 22 28.5 22H25v13h3.5z" fill="#F5F5F5"/>
+  <path d="M39 18h6v28h-6zM39 31h10v6H39z" fill="#D4AF37"/>
+</svg>
